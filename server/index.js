@@ -7,6 +7,7 @@ const User = require("./models/User");
 const Event = require("./models/Event");
 const Community = require("./models/Community");
 const Registration = require("./models/Registration");
+const Leaderboard = require("./models/Leaderboard");
 
 dotenv.config();
 const app = express();
@@ -155,14 +156,16 @@ app.get("/api/events", async (req, res) => {
 
 app.get("/api/stats", async (req, res) => {
   try {
-    const userCount = await User.countDocuments();
+    const userCount = await User.countDocuments({ role: "student" });
     const eventCount = await Event.countDocuments();
     const communityCount = await Community.countDocuments();
+    const registrationCount = await Registration.countDocuments();
 
     res.status(200).json({
       activeStudents: userCount,
       annualEvents: eventCount,
-      dynamicCommunities: communityCount
+      dynamicCommunities: communityCount,
+      totalRegistrations: registrationCount
     });
   } catch (err) {
     console.error(err);
@@ -311,6 +314,96 @@ app.put("/api/users/:userId", async (req, res) => {
         joinedEvents: updatedUser.joinedEvents
       }
     });
+  } catch (err) {
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
+// ===== Leaderboard Endpoints =====
+
+// Public: Get all leaderboard entries sorted by rank
+app.get("/api/leaderboard", async (req, res) => {
+  try {
+    const entries = await Leaderboard.find().sort({ rank: 1 });
+    res.status(200).json(entries);
+  } catch (err) {
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
+// Admin: Add a leaderboard entry
+app.post("/api/admin/leaderboard", async (req, res) => {
+  try {
+    const { name, avatar, events, wins, points } = req.body;
+    if (!name || points === undefined) {
+      return res.status(400).json({ message: "Name and points are required" });
+    }
+
+    // Auto-assign rank based on current count
+    const count = await Leaderboard.countDocuments();
+    const entry = new Leaderboard({
+      rank: count + 1,
+      name,
+      avatar: avatar || name.split(" ").map(w => w[0]).join("").toUpperCase().slice(0, 2),
+      events: events || 0,
+      wins: wins || 0,
+      points
+    });
+    await entry.save();
+
+    // Re-rank all entries by points descending
+    const all = await Leaderboard.find().sort({ points: -1 });
+    for (let i = 0; i < all.length; i++) {
+      all[i].rank = i + 1;
+      await all[i].save();
+    }
+
+    res.status(201).json({ message: "Entry added", entry });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
+// Admin: Update a leaderboard entry
+app.put("/api/admin/leaderboard/:id", async (req, res) => {
+  try {
+    const { name, avatar, events, wins, points } = req.body;
+    const updates = {};
+    if (name) updates.name = name;
+    if (avatar) updates.avatar = avatar;
+    if (events !== undefined) updates.events = events;
+    if (wins !== undefined) updates.wins = wins;
+    if (points !== undefined) updates.points = points;
+
+    await Leaderboard.findByIdAndUpdate(req.params.id, updates);
+
+    // Re-rank all entries by points descending
+    const all = await Leaderboard.find().sort({ points: -1 });
+    for (let i = 0; i < all.length; i++) {
+      all[i].rank = i + 1;
+      await all[i].save();
+    }
+
+    res.status(200).json({ message: "Entry updated" });
+  } catch (err) {
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
+// Admin: Delete a leaderboard entry
+app.delete("/api/admin/leaderboard/:id", async (req, res) => {
+  try {
+    await Leaderboard.findByIdAndDelete(req.params.id);
+
+    // Re-rank remaining entries
+    const all = await Leaderboard.find().sort({ points: -1 });
+    for (let i = 0; i < all.length; i++) {
+      all[i].rank = i + 1;
+      await all[i].save();
+    }
+
+    res.status(200).json({ message: "Entry deleted" });
   } catch (err) {
     res.status(500).json({ message: "Server Error" });
   }

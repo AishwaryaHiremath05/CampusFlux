@@ -5,114 +5,17 @@ import {
   LogOut, Heart, MapPin, Clock, ArrowRight, Sparkles,
   BookOpen, Trophy, Target, BarChart3, Globe, Shield,
   ExternalLink, Filter, ChevronDown, Check, AlertCircle, Eye, EyeOff,
-  Mail, Phone
+  Mail, Phone, GraduationCap
 } from "lucide-react";
 
 // ============================================================
 // DATA
 // ============================================================
-const EVENTS = [
-  {
-    id: 1,
-    title: "ICICST - 2026",
-    category: "Conference",
-    date: "Oct 9, 2026",
-    time: "10:00 AM",
-    location: "CSIBER Auditorium",
-    attendees: 150,
-    maxAttendees: 500,
-    description: "International Conference on Innovations in Computer Science and Technology. Exploring AI, Blockchain, and IoT.",
-    tags: ["Research", "Innovation", "Tech"],
-    color: "#3b82f6",
-    gradient: "linear-gradient(135deg, #3b82f6, #6366f1)",
-    featured: true,
-  },
-  {
-    id: 2,
-    title: "Webinar: Career Pathways",
-    category: "Webinar",
-    date: "May 12, 2026",
-    time: "11:00 AM",
-    location: "Online (Zoom)",
-    attendees: 85,
-    maxAttendees: 200,
-    description: "Expert talk on navigating career paths in Data Science and Software Engineering.",
-    tags: ["Career", "Mentorship"],
-    color: "#8b5cf6",
-    gradient: "linear-gradient(135deg, #8b5cf6, #a855f7)",
-    featured: true,
-  },
-  {
-    id: 3,
-    title: "HR Analytics Workshop",
-    category: "Workshop",
-    date: "Jun 5, 2026",
-    time: "2:00 PM",
-    location: "MBA Lab 1",
-    attendees: 45,
-    maxAttendees: 60,
-    description: "Hands-on session on using data for human resource management and decision making.",
-    tags: ["HR", "Analytics", "Data"],
-    color: "#06b6d4",
-    gradient: "linear-gradient(135deg, #06b6d4, #0891b2)",
-    featured: true,
-  },
-  {
-    id: 4,
-    title: "MCA Entrance Guidance",
-    category: "Seminar",
-    date: "May 20, 2026",
-    time: "10:30 AM",
-    location: "Seminar Hall 2",
-    attendees: 120,
-    maxAttendees: 150,
-    description: "In-depth guidance for MAH-MCA-CET and other entrance examinations.",
-    tags: ["Admissions", "MCA", "Education"],
-    color: "#f59e0b",
-    gradient: "linear-gradient(135deg, #f59e0b, #d97706)",
-    featured: false,
-  },
-  {
-    id: 5,
-    title: "Tech-SIBER Hackathon",
-    category: "Hackathon",
-    date: "Aug 15, 2026",
-    time: "9:00 AM",
-    location: "IT Lab Complex",
-    attendees: 30,
-    maxAttendees: 100,
-    description: "24-hour internal hackathon to solve campus-specific problems using modern tech stacks.",
-    tags: ["Coding", "Competition"],
-    color: "#10b981",
-    gradient: "linear-gradient(135deg, #10b981, #059669)",
-    featured: false,
-  },
-  {
-    id: 6,
-    title: "Cultural Fest: SIBERIAN",
-    category: "Festival",
-    date: "Feb 10, 2027",
-    time: "5:00 PM",
-    location: "Open Ground",
-    attendees: 0,
-    maxAttendees: 1000,
-    description: "The grand annual cultural festival of CSIBER. Music, dance, and tech exhibitions.",
-    tags: ["Culture", "Music", "Fest"],
-    color: "#f43f5e",
-    gradient: "linear-gradient(135deg, #f43f5e, #e11d48)",
-    featured: false,
-  },
-];
 
-const LEADERBOARD = [
-  { rank: 1, name: "Sneha Kapoor", avatar: "SK", events: 24, wins: 18, points: 2840, trend: "+12%" },
-  { rank: 2, name: "Keshav Sharma", avatar: "KS", events: 22, wins: 16, points: 2650, trend: "+8%" },
-  { rank: 3, name: "Loveleen Kaur", avatar: "LK", events: 20, wins: 15, points: 2430, trend: "+15%" },
-  { rank: 4, name: "Sunil Mehta", avatar: "SM", events: 19, wins: 13, points: 2210, trend: "+5%" },
-  { rank: 5, name: "Radhika Patel", avatar: "RP", events: 17, wins: 12, points: 2080, trend: "+10%" },
-  { rank: 6, name: "Arjun Reddy", avatar: "AR", events: 16, wins: 11, points: 1950, trend: "+7%" },
-  { rank: 7, name: "Priya Singh", avatar: "PS", events: 15, wins: 10, points: 1820, trend: "+3%" },
-];
+
+
+
+
 
 const COMMUNITIES = [
   { name: "CodeCraft", members: 340, icon: "💻", color: "#3b82f6" },
@@ -312,7 +215,7 @@ function Sidebar({ page, setPage, collapsed, setCollapsed, setShowAuth, user, se
         { id: "admin-events", label: "Manage Events", icon: <Calendar size={20} /> },
         { id: "admin-registrations", label: "Registrations", icon: <Users size={20} /> },
         { id: "admin-attendance", label: "Attendance", icon: <Check size={20} /> },
-        { id: "admin-profile", label: "Profile", icon: <User size={20} /> },
+        { id: "admin-leaderboard", label: "Leaderboard", icon: <Trophy size={20} /> },
       ]
     : [
         { id: "home", label: "Home", icon: <Home size={20} /> },
@@ -351,10 +254,9 @@ function Sidebar({ page, setPage, collapsed, setCollapsed, setShowAuth, user, se
             width: 38, height: 38, borderRadius: 10,
             background: "var(--accent-blue)",
             display: "flex", alignItems: "center", justifyContent: "center",
-            fontFamily: "var(--font-display)", fontWeight: 800, fontSize: 18,
             flexShrink: 0, color: "white"
           }}>
-            CF
+            <GraduationCap size={20} fill="white" />
           </div>
           {!collapsed && (
             <span style={{
@@ -362,7 +264,7 @@ function Sidebar({ page, setPage, collapsed, setCollapsed, setShowAuth, user, se
               fontSize: 20, whiteSpace: "nowrap",
               color: "var(--text-primary)",
             }}>
-              CampusFlux Portal
+              CampusFlux
             </span>
           )}
         </div>
@@ -468,7 +370,20 @@ function Sidebar({ page, setPage, collapsed, setCollapsed, setShowAuth, user, se
 }
 
 /* ---------- Top Bar ---------- */
-function TopBar({ page, setPage, setShowAuth, searchQuery, setSearchQuery, user, theme, toggleTheme }) {
+function TopBar({ page, setPage, setShowAuth, searchQuery, setSearchQuery, user, theme, toggleTheme, setUser, setJoinedEvents }) {
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const profileRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (profileRef.current && !profileRef.current.contains(e.target)) {
+        setShowProfileMenu(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const pageNames = {
     home: "Welcome",
     dashboard: "Dashboard",
@@ -477,7 +392,11 @@ function TopBar({ page, setPage, setShowAuth, searchQuery, setSearchQuery, user,
     leaderboard: "Leaderboard",
     communities: "Communities",
     profile: "My Profile",
-    admin: "Admin Dashboard",
+    "admin-dashboard": "Admin Dashboard",
+    "admin-events": "Manage Events",
+    "admin-registrations": "Registrations",
+    "admin-attendance": "Attendance",
+    "admin-leaderboard": "Leaderboard",
   };
   return (
     <header
@@ -528,7 +447,6 @@ function TopBar({ page, setPage, setShowAuth, searchQuery, setSearchQuery, user,
           />
         </div>
 
-
         {/* Profile */}
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <button
@@ -544,26 +462,75 @@ function TopBar({ page, setPage, setShowAuth, searchQuery, setSearchQuery, user,
             {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
           </button>
 
-          <button
-            id="profile-btn"
-            onClick={() => {
-              if (user) {
-                setPage("profile");
-              } else {
-                setShowAuth(true);
-              }
-            }}
-            style={{
-              width: 36, height: 36, borderRadius: "var(--radius-full)",
-              background: "var(--gradient-primary)", border: "none",
-              cursor: "pointer", color: "white", fontSize: 14, fontWeight: 700,
-              display: "flex", alignItems: "center", justifyContent: "center",
-              transition: "all 0.2s ease",
-              boxShadow: "var(--shadow-glow)",
-            }}
-          >
-            {user ? (user.fullName ? user.fullName.charAt(0).toUpperCase() : "U") : <User size={16} />}
-          </button>
+          <div ref={profileRef} style={{ position: "relative" }}>
+            <button
+              id="profile-btn"
+              onClick={() => {
+                if (user) {
+                  if (user.role === "admin") {
+                    setShowProfileMenu(!showProfileMenu);
+                  } else {
+                    setPage("profile");
+                  }
+                } else {
+                  setShowAuth(true);
+                }
+              }}
+              style={{
+                width: 36, height: 36, borderRadius: "var(--radius-full)",
+                background: "var(--gradient-primary)", border: "none",
+                cursor: "pointer", color: "white", fontSize: 14, fontWeight: 700,
+                display: "flex", alignItems: "center", justifyContent: "center",
+                transition: "all 0.2s ease",
+                boxShadow: "var(--shadow-glow)",
+              }}
+            >
+              {user ? (user.fullName ? user.fullName.charAt(0).toUpperCase() : "U") : <User size={16} />}
+            </button>
+
+            {/* Admin Profile Dropdown */}
+            {showProfileMenu && user?.role === "admin" && (
+              <div style={{
+                position: "absolute", top: 44, right: 0,
+                width: 260, background: "var(--bg-card)",
+                border: "1px solid var(--border-subtle)",
+                borderRadius: "var(--radius-lg)",
+                boxShadow: "var(--shadow-lg)",
+                padding: 16, zIndex: 100,
+                animation: "fadeIn 0.2s ease-out",
+              }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+                  <div style={{
+                    width: 40, height: 40, borderRadius: "50%",
+                    background: "var(--gradient-primary)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: 16, fontWeight: 700, color: "white",
+                  }}>
+                    {user.fullName?.charAt(0).toUpperCase() || "A"}
+                  </div>
+                  <div>
+                    <div style={{ fontSize: 14, fontWeight: 700 }}>{user.fullName}</div>
+                    <div style={{ fontSize: 12, color: "var(--text-muted)" }}>{user.email}</div>
+                  </div>
+                </div>
+                <hr style={{ border: "none", borderTop: "1px solid var(--border-subtle)", margin: "12px 0" }} />
+                <button
+                  onClick={() => { setUser(null); if (setJoinedEvents) setJoinedEvents([]); setPage("home"); setShowProfileMenu(false); }}
+                  style={{
+                    width: "100%", padding: "10px 12px", background: "transparent",
+                    border: "none", borderRadius: "var(--radius-sm)",
+                    color: "var(--accent-rose)", fontSize: 14, fontWeight: 600,
+                    cursor: "pointer", display: "flex", alignItems: "center", gap: 10,
+                    transition: "background 0.2s",
+                  }}
+                  onMouseEnter={e => e.currentTarget.style.background = "rgba(239,68,68,0.08)"}
+                  onMouseLeave={e => e.currentTarget.style.background = "transparent"}
+                >
+                  <LogOut size={16} /> Sign Out
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </header>
@@ -806,9 +773,9 @@ function HomePage({ setPage, setShowAuth, stats }) {
           </div>
           <div className="card" style={{ padding: 32, textAlign: "center" }}>
             <div style={{ fontSize: 40, fontWeight: 800, color: "var(--accent-emerald)", fontFamily: "var(--font-display)" }}>
-              <AnimatedCounter target={stats?.dynamicCommunities || 15} />+
+              <AnimatedCounter target={stats?.totalRegistrations || 0} />+
             </div>
-            <div style={{ color: "var(--text-muted)", fontSize: 14, marginTop: 4 }}>Dynamic Communities</div>
+            <div style={{ color: "var(--text-muted)", fontSize: 14, marginTop: 4 }}>Total Registrations</div>
           </div>
         </div>
       </section>
@@ -853,7 +820,7 @@ function HomePage({ setPage, setShowAuth, stats }) {
         textAlign: "center"
       }}>
         <p style={{ color: "var(--text-muted)", fontSize: 14 }}>
-          © 2026 CSIBER Flux • Developed with ❤️ for the student community
+          © 2026 CampusFlux | Developed with ❤️ for the student community
         </p>
       </section>
     </div>
@@ -861,7 +828,9 @@ function HomePage({ setPage, setShowAuth, stats }) {
 }
 
 /* ---------- Dashboard Page ---------- */
-function DashboardPage({ setPage, onEventClick }) {
+function DashboardPage({ setPage, onEventClick, events, stats }) {
+  const displayEvents = events?.length > 0 ? events.slice(0, 4) : [];
+
   return (
     <div className="animate-fade-in" style={{ padding: "28px 32px" }}>
       {/* Hero Welcome */}
@@ -893,10 +862,10 @@ function DashboardPage({ setPage, onEventClick }) {
             fontWeight: 800, lineHeight: 1.2, marginBottom: 10,
           }}>
             Discover What's <br />
-            <span className="gradient-text-hero">Happening at CSIBER</span>
+            <span className="gradient-text-hero">Happening on Campus</span>
           </h2>
           <p style={{ color: "var(--text-secondary)", fontSize: 15, maxWidth: 480, marginBottom: 24 }}>
-            Stay connected with events, hackathons, workshops, and communities.
+            Stay connected with {stats?.annualEvents || 0} events and join {stats?.activeStudents || 0} students.
             Your campus experience, supercharged.
           </p>
           <div style={{ display: "flex", gap: 12 }}>
@@ -910,8 +879,6 @@ function DashboardPage({ setPage, onEventClick }) {
           </div>
         </div>
       </div>
-
-
 
       {/* Two Column Section */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24, marginBottom: 32 }}>
@@ -930,9 +897,13 @@ function DashboardPage({ setPage, onEventClick }) {
             </button>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }} className="stagger-children">
-            {EVENTS.slice(0, 4).map((ev) => (
+            {displayEvents.length === 0 ? (
+              <div className="card" style={{ padding: 32, textAlign: "center", color: "var(--text-muted)" }}>
+                No upcoming events found.
+              </div>
+            ) : displayEvents.map((ev) => (
               <div
-                key={ev.id}
+                key={ev._id || ev.id}
                 className="card"
                 onClick={() => onEventClick(ev)}
                 style={{
@@ -941,7 +912,7 @@ function DashboardPage({ setPage, onEventClick }) {
               >
                 <div style={{
                   width: 44, height: 44, borderRadius: "var(--radius-md)",
-                  background: ev.gradient, display: "flex",
+                  background: ev.gradient || "var(--gradient-primary)", display: "flex",
                   alignItems: "center", justifyContent: "center",
                   flexShrink: 0, fontSize: 18,
                 }}>
@@ -1013,16 +984,16 @@ function DashboardPage({ setPage, onEventClick }) {
                 background: "rgba(59,130,246,0.06)",
                 border: "1px solid rgba(59,130,246,0.1)",
               }}>
-                <div style={{ fontSize: 20, fontWeight: 700, fontFamily: "var(--font-display)" }}>92%</div>
-                <div style={{ fontSize: 12, color: "var(--text-muted)" }}>Attendance Rate</div>
+                <div style={{ fontSize: 20, fontWeight: 700, fontFamily: "var(--font-display)" }}>{stats?.totalRegistrations || 0}</div>
+                <div style={{ fontSize: 12, color: "var(--text-muted)" }}>Total Registrations</div>
               </div>
               <div style={{
                 padding: 14, borderRadius: "var(--radius-md)",
                 background: "rgba(139,92,246,0.06)",
                 border: "1px solid rgba(139,92,246,0.1)",
               }}>
-                <div style={{ fontSize: 20, fontWeight: 700, fontFamily: "var(--font-display)" }}>Top 5%</div>
-                <div style={{ fontSize: 12, color: "var(--text-muted)" }}>Campus Rank</div>
+                <div style={{ fontSize: 20, fontWeight: 700, fontFamily: "var(--font-display)" }}>{stats?.annualEvents || 0}</div>
+                <div style={{ fontSize: 12, color: "var(--text-muted)" }}>Active Events</div>
               </div>
             </div>
           </div>
@@ -1103,11 +1074,11 @@ function DashboardPage({ setPage, onEventClick }) {
 }
 
 /* ---------- Explore Page ---------- */
-function ExplorePage({ searchQuery, onEventClick }) {
+function ExplorePage({ searchQuery, onEventClick, events }) {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const categories = ["All", "Hackathon", "Workshop", "Talk", "Competition", "Festival"];
 
-  const filtered = EVENTS.filter((e) => {
+  const filtered = (events || []).filter((e) => {
     const matchCat = selectedCategory === "All" || e.category === selectedCategory;
     const matchSearch = !searchQuery ||
       e.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -1151,8 +1122,8 @@ function ExplorePage({ searchQuery, onEventClick }) {
           <div style={{
             display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 18,
           }}>
-            {EVENTS.filter(e => e.featured).map((event, i) => (
-              <EventCard key={event.id} event={event} delay={i * 0.15} onClick={() => onEventClick(event)} />
+            {(events || []).filter(e => e.featured).map((event, i) => (
+              <EventCard key={event._id || event.id} event={event} delay={i * 0.15} onClick={() => onEventClick(event)} />
             ))}
           </div>
         </div>
@@ -1174,7 +1145,7 @@ function ExplorePage({ searchQuery, onEventClick }) {
         display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 18,
       }}>
         {filtered.map((event, i) => (
-          <EventCard key={event.id} event={event} delay={i * 0.1} onClick={() => onEventClick(event)} />
+          <EventCard key={event._id || event.id} event={event} delay={i * 0.1} onClick={() => onEventClick(event)} />
         ))}
       </div>
 
@@ -1191,7 +1162,7 @@ function ExplorePage({ searchQuery, onEventClick }) {
 }
 
 /* ---------- My Events Page ---------- */
-function MyEventsPage({ user, joinedIds = [], onEventClick, setPage, setShowAuth }) {
+function MyEventsPage({ user, joinedIds = [], onEventClick, setPage, setShowAuth, events }) {
   if (!user) {
     return (
       <div style={{ padding: "60px 32px", textAlign: "center" }}>
@@ -1207,7 +1178,10 @@ function MyEventsPage({ user, joinedIds = [], onEventClick, setPage, setShowAuth
     );
   }
 
-  const myEvents = EVENTS.filter(ev => joinedIds.includes(ev.id.toString()) || joinedIds.includes(ev.id));
+  const myEvents = (events || []).filter(ev => {
+    const evIdStr = (ev._id || ev.id)?.toString();
+    return joinedIds.some(jid => jid.toString() === evIdStr);
+  });
 
   return (
     <div className="animate-fade-in" style={{ padding: "28px 32px" }}>
@@ -1232,7 +1206,7 @@ function MyEventsPage({ user, joinedIds = [], onEventClick, setPage, setShowAuth
         <div style={{ display: "flex", flexDirection: "column", gap: 14 }} className="stagger-children">
           {myEvents.map((ev, i) => (
             <div
-              key={ev.id}
+              key={ev._id || ev.id}
               className="card"
               onClick={() => onEventClick(ev)}
               style={{
@@ -1302,68 +1276,88 @@ function MyEventsPage({ user, joinedIds = [], onEventClick, setPage, setShowAuth
 
 /* ---------- Leaderboard Page ---------- */
 function LeaderboardPage() {
+  const [entries, setEntries] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("http://localhost:5000/api/leaderboard")
+      .then(res => res.json())
+      .then(data => { setEntries(data); setLoading(false); })
+      .catch(() => setLoading(false));
+  }, []);
+
+  if (loading) return <div style={{ padding: 60, textAlign: "center", color: "var(--text-muted)" }}>Loading leaderboard...</div>;
+
+  if (entries.length === 0) return (
+    <div className="animate-fade-in" style={{ padding: 60, textAlign: "center" }}>
+      <Trophy size={48} style={{ opacity: 0.2, marginBottom: 16 }} />
+      <p style={{ color: "var(--text-muted)", fontSize: 16 }}>No leaderboard entries yet.</p>
+      <p style={{ color: "var(--text-muted)", fontSize: 13 }}>Winners will appear here once the admin adds them.</p>
+    </div>
+  );
+
+  const top3 = entries.slice(0, 3);
+  const podiumOrder = top3.length >= 3 ? [top3[1], top3[0], top3[2]] : top3;
+
   return (
     <div className="animate-fade-in" style={{ padding: "28px 32px" }}>
       {/* Top 3 Podium */}
-      <div style={{
-        display: "flex", justifyContent: "center", alignItems: "flex-end",
-        gap: 20, marginBottom: 40, paddingTop: 20,
-      }}>
-        {[LEADERBOARD[1], LEADERBOARD[0], LEADERBOARD[2]].map((p, idx) => {
-          const height = idx === 1 ? 200 : idx === 0 ? 170 : 150;
-          const rank = idx === 1 ? 1 : idx === 0 ? 2 : 3;
-          const colors = ["#c0c0c0", "#fbbf24", "#cd7f32"];
-          const ringColor = colors[rank - 1];
-          return (
-            <div key={p.name} style={{
-              display: "flex", flexDirection: "column", alignItems: "center",
-              animation: `slideInUp 0.7s ease-out ${idx * 0.2}s forwards`,
-              opacity: 0,
-            }}>
-              {/* Avatar */}
-              <div style={{
-                width: rank === 1 ? 80 : 64, height: rank === 1 ? 80 : 64,
-                borderRadius: "50%",
-                background: `linear-gradient(135deg, ${ringColor}, ${ringColor}aa)`,
-                display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: rank === 1 ? 24 : 20, fontWeight: 800,
-                fontFamily: "var(--font-display)",
-                boxShadow: `0 0 25px ${ringColor}40`,
-                marginBottom: 10, position: "relative",
+      {top3.length >= 3 && (
+        <div style={{
+          display: "flex", justifyContent: "center", alignItems: "flex-end",
+          gap: 20, marginBottom: 40, paddingTop: 20,
+        }}>
+          {podiumOrder.map((p, idx) => {
+            const height = idx === 1 ? 200 : idx === 0 ? 170 : 150;
+            const rank = idx === 1 ? 1 : idx === 0 ? 2 : 3;
+            const colors = ["#c0c0c0", "#fbbf24", "#cd7f32"];
+            const ringColor = colors[rank - 1];
+            return (
+              <div key={p._id || p.name} style={{
+                display: "flex", flexDirection: "column", alignItems: "center",
+                animation: `slideInUp 0.7s ease-out ${idx * 0.2}s forwards`,
+                opacity: 0,
               }}>
-                {p.avatar}
-                {rank === 1 && (
-                  <div style={{
-                    position: "absolute", top: -12,
-                    fontSize: 22,
-                  }}>👑</div>
-                )}
+                <div style={{
+                  width: rank === 1 ? 80 : 64, height: rank === 1 ? 80 : 64,
+                  borderRadius: "50%",
+                  background: `linear-gradient(135deg, ${ringColor}, ${ringColor}aa)`,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: rank === 1 ? 24 : 20, fontWeight: 800,
+                  fontFamily: "var(--font-display)",
+                  boxShadow: `0 0 25px ${ringColor}40`,
+                  marginBottom: 10, position: "relative",
+                }}>
+                  {p.avatar}
+                  {rank === 1 && (
+                    <div style={{ position: "absolute", top: -12, fontSize: 22 }}>👑</div>
+                  )}
+                </div>
+                <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 2 }}>{p.name}</div>
+                <div style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 10 }}>
+                  {p.points.toLocaleString()} pts
+                </div>
+                <div style={{
+                  width: rank === 1 ? 120 : 100, height: height,
+                  background: rank === 1
+                    ? "linear-gradient(180deg, rgba(251,191,36,0.2), rgba(251,191,36,0.05))"
+                    : rank === 2
+                      ? "linear-gradient(180deg, rgba(192,192,192,0.15), rgba(192,192,192,0.03))"
+                      : "linear-gradient(180deg, rgba(205,127,50,0.15), rgba(205,127,50,0.03))",
+                  borderRadius: "var(--radius-md) var(--radius-md) 0 0",
+                  border: `1px solid ${ringColor}25`,
+                  borderBottom: "none",
+                  display: "flex", alignItems: "flex-start", justifyContent: "center",
+                  paddingTop: 16, fontFamily: "var(--font-display)",
+                  fontSize: 28, fontWeight: 800, color: `${ringColor}cc`,
+                }}>
+                  #{rank}
+                </div>
               </div>
-              <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 2 }}>{p.name}</div>
-              <div style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 10 }}>
-                {p.points.toLocaleString()} pts
-              </div>
-              {/* Podium bar */}
-              <div style={{
-                width: rank === 1 ? 120 : 100, height: height,
-                background: rank === 1
-                  ? "linear-gradient(180deg, rgba(251,191,36,0.2), rgba(251,191,36,0.05))"
-                  : rank === 2
-                    ? "linear-gradient(180deg, rgba(192,192,192,0.15), rgba(192,192,192,0.03))"
-                    : "linear-gradient(180deg, rgba(205,127,50,0.15), rgba(205,127,50,0.03))",
-                borderRadius: "var(--radius-md) var(--radius-md) 0 0",
-                border: `1px solid ${ringColor}25`,
-                borderBottom: "none",
-                display: "flex", alignItems: "flex-start", justifyContent: "center",
-                paddingTop: 16, fontFamily: "var(--font-display)",
-                fontSize: 28, fontWeight: 800, color: `${ringColor}cc`,
-              }}>
-                #{rank}
-              </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      )}
 
       {/* Full Leaderboard Table */}
       <div className="card" style={{ overflow: "hidden" }}>
@@ -1375,12 +1369,9 @@ function LeaderboardPage() {
           <h3 style={{ fontFamily: "var(--font-display)", fontSize: 16, fontWeight: 700 }}>
             Full Rankings
           </h3>
-          <span className="badge badge-purple">{LEADERBOARD.length} Participants</span>
+          <span className="badge badge-purple">{entries.length} Participants</span>
         </div>
-        <table style={{
-          width: "100%", borderCollapse: "collapse",
-          fontSize: 14,
-        }}>
+        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 14 }}>
           <thead>
             <tr style={{
               borderBottom: "1px solid var(--border-subtle)",
@@ -1391,16 +1382,14 @@ function LeaderboardPage() {
               <th style={{ padding: "12px", textAlign: "left" }}>Participant</th>
               <th style={{ padding: "12px", textAlign: "center" }}>Events</th>
               <th style={{ padding: "12px", textAlign: "center" }}>Wins</th>
-              <th style={{ padding: "12px", textAlign: "center" }}>Points</th>
-              <th style={{ padding: "12px 24px", textAlign: "right" }}>Trend</th>
+              <th style={{ padding: "12px 24px", textAlign: "center" }}>Points</th>
             </tr>
           </thead>
           <tbody>
-            {LEADERBOARD.map((p, i) => (
-              <tr key={i} style={{
+            {entries.map((p) => (
+              <tr key={p._id} style={{
                 borderBottom: "1px solid var(--border-subtle)",
                 transition: "background 0.2s",
-                cursor: "pointer",
               }}
                 onMouseEnter={(e) => e.currentTarget.style.background = "rgba(255,255,255,0.02)"}
                 onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
@@ -1433,16 +1422,8 @@ function LeaderboardPage() {
                 <td style={{ padding: "14px 12px", textAlign: "center", color: "var(--text-secondary)" }}>
                   {p.wins}
                 </td>
-                <td style={{ padding: "14px 12px", textAlign: "center", fontWeight: 700, fontFamily: "var(--font-display)" }}>
+                <td style={{ padding: "14px 24px", textAlign: "center", fontWeight: 700, fontFamily: "var(--font-display)" }}>
                   {p.points.toLocaleString()}
-                </td>
-                <td style={{ padding: "14px 24px", textAlign: "right" }}>
-                  <span style={{
-                    color: "#34d399", fontSize: 12, fontWeight: 600,
-                    display: "inline-flex", alignItems: "center", gap: 2,
-                  }}>
-                    <TrendingUp size={12} /> {p.trend}
-                  </span>
                 </td>
               </tr>
             ))}
@@ -1470,8 +1451,8 @@ function CommunitiesPage() {
         <h3 style={{ fontFamily: "var(--font-display)", fontSize: 22, fontWeight: 700 }}>
           Campus Communities
         </h3>
-        <p style={{ fontSize: 14, color: "var(--text-muted)", marginTop: 4 }}>
-          Join communities to connect with like-minded peers
+        <p style={{ fontSize: 14, color: "var(--text-secondary)", marginTop: 4 }}>
+          Discover active communities on campus
         </p>
       </div>
 
@@ -1492,15 +1473,9 @@ function CommunitiesPage() {
                 <div style={{ fontSize: 12, color: "var(--text-muted)" }}>{c.members} members</div>
               </div>
             </div>
-            <p style={{ fontSize: 13, color: "var(--text-secondary)", marginBottom: 16, lineHeight: 1.5 }}>
+            <p style={{ fontSize: 13, color: "var(--text-secondary)", marginBottom: 4, lineHeight: 1.5 }}>
               {c.desc}
             </p>
-            <button className="btn-outline" style={{
-              width: "100%", padding: 9, fontSize: 13,
-              display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
-            }}>
-              <Users size={14} /> Join Community
-            </button>
           </div>
         ))}
       </div>
@@ -1855,111 +1830,132 @@ function AdminAttendance({ events }) {
 }
 
 /* ---------- Admin Profile Page ---------- */
-function AdminProfilePage({ user, setUser, setPage, stats }) {
-  const [email, setEmail] = useState(user?.email || "");
-  const [password, setPassword] = useState("");
-  const [fullName, setFullName] = useState(user?.fullName || "");
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
 
-  const handleUpdate = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setMessage("");
+
+
+/* ---------- Admin Leaderboard Management ---------- */
+function AdminLeaderboard() {
+  const [entries, setEntries] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const [form, setForm] = useState({ name: "", events: "", wins: "", points: "" });
+
+  const fetchEntries = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/api/users/${user.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ fullName, email, password })
-      });
+      const res = await fetch("http://localhost:5000/api/leaderboard");
       const data = await res.json();
-      if (res.ok) {
-        setUser(data.user);
-        setMessage("✅ Profile updated successfully!");
-        setPassword("");
-      } else {
-        setMessage("❌ " + data.message);
-      }
-    } catch (err) { setMessage("❌ Connection error"); }
+      setEntries(data);
+    } catch (err) { console.error(err); }
     setLoading(false);
   };
 
+  useEffect(() => { fetchEntries(); }, []);
+
+  const handleAdd = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch("http://localhost:5000/api/admin/leaderboard", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          events: parseInt(form.events) || 0,
+          wins: parseInt(form.wins) || 0,
+          points: parseInt(form.points) || 0
+        })
+      });
+      if (res.ok) {
+        setForm({ name: "", events: "", wins: "", points: "" });
+        setShowForm(false);
+        fetchEntries();
+      }
+    } catch (err) { console.error(err); }
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Remove this entry?")) return;
+    try {
+      const res = await fetch(`http://localhost:5000/api/admin/leaderboard/${id}`, { method: "DELETE" });
+      if (res.ok) fetchEntries();
+    } catch (err) { console.error(err); }
+  };
+
   return (
-    <div className="animate-fade-in" style={{ padding: 40, maxWidth: 1000 }}>
-      <div style={{ marginBottom: 32 }}>
-        <h2 style={{ fontSize: 28, fontWeight: 800, fontFamily: "var(--font-display)", marginBottom: 8 }}>Admin Profile</h2>
-        <p style={{ color: "var(--text-secondary)" }}>Manage your account settings and view your activity.</p>
+    <div className="animate-fade-in" style={{ padding: 40 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 32 }}>
+        <div>
+          <h2 style={{ fontSize: 28, fontWeight: 800, fontFamily: "var(--font-display)", marginBottom: 8 }}>Leaderboard</h2>
+          <p style={{ color: "var(--text-secondary)" }}>Add winners and manage rankings. Entries auto-rank by points.</p>
+        </div>
+        <button className="btn-primary" onClick={() => setShowForm(!showForm)}>
+          {showForm ? "View Rankings" : "+ Add Winner"}
+        </button>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 350px", gap: 32 }}>
-        <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-          {/* Basic Info & Settings */}
-          <div className="card" style={{ padding: 32 }}>
-            <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 24, display: "flex", alignItems: "center", gap: 10 }}>
-              <Settings size={20} color="var(--accent-blue)" /> Account Settings
-            </h3>
-            <form onSubmit={handleUpdate} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+      {showForm ? (
+        <div className="card" style={{ maxWidth: 600, padding: 32 }}>
+          <form onSubmit={handleAdd} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+            <div>
+              <label className="form-label">Student Name</label>
+              <input required className="form-input" placeholder="e.g. Sneha Kapoor" value={form.name} onChange={e => setForm({...form, name: e.target.value})} />
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16 }}>
               <div>
-                <label className="form-label">Full Name</label>
-                <input className="form-input" value={fullName} onChange={e => setFullName(e.target.value)} />
-              </div>
-              <div>
-                <label className="form-label">Email Address</label>
-                <input className="form-input" type="email" value={email} onChange={e => setEmail(e.target.value)} />
+                <label className="form-label">Events Participated</label>
+                <input type="number" className="form-input" placeholder="0" value={form.events} onChange={e => setForm({...form, events: e.target.value})} />
               </div>
               <div>
-                <label className="form-label">New Password (leave blank to keep current)</label>
-                <input className="form-input" type="password" placeholder="••••••••" value={password} onChange={e => setPassword(e.target.value)} />
+                <label className="form-label">Wins</label>
+                <input type="number" className="form-input" placeholder="0" value={form.wins} onChange={e => setForm({...form, wins: e.target.value})} />
               </div>
-              <button type="submit" disabled={loading} className="btn-primary" style={{ padding: 12, marginTop: 10 }}>
-                {loading ? "Updating..." : "Save Changes"}
-              </button>
-              {message && <p style={{ fontSize: 14, textAlign: "center", color: message.includes("✅") ? "#10b981" : "#ef4444" }}>{message}</p>}
-            </form>
-          </div>
-        </div>
-
-        <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-          {/* Overview Stats */}
-          <div className="card" style={{ padding: 24, background: "linear-gradient(135deg, rgba(59,130,246,0.1), rgba(139,92,246,0.1))" }}>
-            <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 20 }}>Activity Overview</h3>
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span style={{ fontSize: 14, color: "var(--text-secondary)" }}>Events Created</span>
-                <span style={{ fontWeight: 700 }}>{stats?.totalEvents || 0}</span>
-              </div>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span style={{ fontSize: 14, color: "var(--text-secondary)" }}>Registrations</span>
-                <span style={{ fontWeight: 700 }}>{stats?.totalRegistrations || 0}</span>
-              </div>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span style={{ fontSize: 14, color: "var(--text-secondary)" }}>Attendance Marked</span>
-                <span style={{ fontWeight: 700 }}>{stats?.totalAttendance || 0}</span>
+              <div>
+                <label className="form-label">Points</label>
+                <input required type="number" className="form-input" placeholder="0" value={form.points} onChange={e => setForm({...form, points: e.target.value})} />
               </div>
             </div>
-          </div>
-
-          {/* Quick Actions */}
-          <div className="card" style={{ padding: 24 }}>
-            <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 20 }}>Quick Actions</h3>
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              <button className="btn-ghost" onClick={() => setPage("admin-events")} style={{ justifyContent: "flex-start", gap: 12, width: "100%", padding: "10px 14px" }}>
-                <Calendar size={18} /> Add New Event
-              </button>
-              <button className="btn-ghost" onClick={() => setPage("admin-registrations")} style={{ justifyContent: "flex-start", gap: 12, width: "100%", padding: "10px 14px" }}>
-                <Users size={18} /> View Registrations
-              </button>
-              <button className="btn-ghost" onClick={() => setPage("admin-attendance")} style={{ justifyContent: "flex-start", gap: 12, width: "100%", padding: "10px 14px" }}>
-                <Check size={18} /> Manage Attendance
-              </button>
-              <hr style={{ border: "none", borderTop: "1px solid var(--border-subtle)", margin: "10px 0" }} />
-              <button className="btn-ghost" onClick={() => { setUser(null); setPage("home"); }} style={{ justifyContent: "flex-start", gap: 12, width: "100%", padding: "10px 14px", color: "var(--accent-rose)" }}>
-                <LogOut size={18} /> Logout
-              </button>
-            </div>
-          </div>
+            <button type="submit" className="btn-primary" style={{ padding: 12 }}>Add to Leaderboard</button>
+          </form>
         </div>
-      </div>
+      ) : (
+        <div className="card" style={{ padding: 0, overflow: "hidden" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+            <thead>
+              <tr style={{ background: "rgba(255,255,255,0.02)", borderBottom: "1px solid var(--border-subtle)", fontSize: 12, color: "var(--text-muted)", textTransform: "uppercase" }}>
+                <th style={{ padding: "14px 24px", textAlign: "left" }}>Rank</th>
+                <th style={{ padding: "14px 24px", textAlign: "left" }}>Name</th>
+                <th style={{ padding: "14px 24px", textAlign: "center" }}>Events</th>
+                <th style={{ padding: "14px 24px", textAlign: "center" }}>Wins</th>
+                <th style={{ padding: "14px 24px", textAlign: "center" }}>Points</th>
+                <th style={{ padding: "14px 24px", textAlign: "right" }}>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {loading ? (
+                <tr><td colSpan="6" style={{ padding: 40, textAlign: "center" }}>Loading...</td></tr>
+              ) : entries.length === 0 ? (
+                <tr><td colSpan="6" style={{ padding: 40, textAlign: "center", color: "var(--text-muted)" }}>No entries yet. Add winners to get started.</td></tr>
+              ) : entries.map(entry => (
+                <tr key={entry._id} style={{ borderBottom: "1px solid var(--border-subtle)" }}>
+                  <td style={{ padding: "14px 24px", fontWeight: 700, fontFamily: "var(--font-display)" }}>
+                    <span style={{ color: entry.rank <= 3 ? entry.rank === 1 ? "#fbbf24" : entry.rank === 2 ? "#c0c0c0" : "#cd7f32" : "var(--text-secondary)" }}>
+                      #{entry.rank}
+                    </span>
+                  </td>
+                  <td style={{ padding: "14px 24px", fontWeight: 600 }}>{entry.name}</td>
+                  <td style={{ padding: "14px 24px", textAlign: "center" }}>{entry.events}</td>
+                  <td style={{ padding: "14px 24px", textAlign: "center" }}>{entry.wins}</td>
+                  <td style={{ padding: "14px 24px", textAlign: "center", fontWeight: 700 }}>{entry.points.toLocaleString()}</td>
+                  <td style={{ padding: "14px 24px", textAlign: "right" }}>
+                    <button className="btn-ghost" style={{ color: "var(--accent-rose)" }} onClick={() => handleDelete(entry._id)}>
+                      <X size={16} />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }
@@ -2022,7 +2018,7 @@ function AdminPage({ adminPage, user, setUser, setPage }) {
       {adminPage === "admin-events" && <AdminManageEvents events={events} onAdd={handleAddEvent} onDelete={handleDeleteEvent} />}
       {adminPage === "admin-registrations" && <AdminRegistrations events={events} />}
       {adminPage === "admin-attendance" && <AdminAttendance events={events} />}
-      {adminPage === "admin-profile" && <AdminProfilePage user={user} setUser={setUser} setPage={setPage} stats={stats} />}
+      {adminPage === "admin-leaderboard" && <AdminLeaderboard />}
     </>
   );
 }
@@ -2113,9 +2109,12 @@ function AuthModal({ show, onClose, isLogin, setIsLogin, setUser, setJoinedEvent
         zIndex: 100,
       }}
     >
-      <div className="glass-strong animate-fade-in-scale" style={{
+      <div style={{
         width: 400, borderRadius: "var(--radius-xl)", padding: "36px 32px",
         position: "relative",
+        background: "var(--bg-card)",
+        border: "1px solid var(--border-subtle)",
+        boxShadow: "var(--shadow-lg)",
       }}>
         {/* Close button */}
         <button onClick={onClose} style={{
@@ -2132,14 +2131,6 @@ function AuthModal({ show, onClose, isLogin, setIsLogin, setUser, setJoinedEvent
 
         {/* Logo */}
         <div style={{ textAlign: "center", marginBottom: 28 }}>
-          <div style={{
-            width: 52, height: 52, borderRadius: 14,
-            background: "var(--gradient-primary)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            margin: "0 auto 14px", fontFamily: "var(--font-display)",
-            fontWeight: 800, fontSize: 22,
-            boxShadow: "var(--shadow-glow)",
-          }}>CS</div>
           <h2 style={{
             fontFamily: "var(--font-display)", fontSize: 22, fontWeight: 700,
             marginBottom: 4,
@@ -2147,7 +2138,7 @@ function AuthModal({ show, onClose, isLogin, setIsLogin, setUser, setJoinedEvent
             {isLogin ? "Welcome Back" : "Create Account"}
           </h2>
           <p style={{ fontSize: 13, color: "var(--text-muted)" }}>
-            {isLogin ? "Sign in to continue to CSIBER Flux" : "Join CSIBER Flux and discover campus events"}
+            {isLogin ? "Sign in to continue to CampusFlux" : "Join CampusFlux and discover campus events"}
           </p>
         </div>
 
@@ -2168,7 +2159,7 @@ function AuthModal({ show, onClose, isLogin, setIsLogin, setUser, setJoinedEvent
                 onChange={(e) => setFullName(e.target.value)}
                 style={{
                   width: "100%", padding: "11px 14px",
-                  background: "rgba(255,255,255,0.04)",
+                  background: "var(--bg-input)",
                   border: "1px solid var(--border-subtle)",
                   borderRadius: "var(--radius-md)",
                   color: "var(--text-primary)", fontSize: 14,
@@ -2197,7 +2188,7 @@ function AuthModal({ show, onClose, isLogin, setIsLogin, setUser, setJoinedEvent
               onChange={(e) => setEmail(e.target.value)}
               style={{
                 width: "100%", padding: "11px 14px",
-                background: "rgba(255,255,255,0.04)",
+                background: "var(--bg-input)",
                 border: "1px solid var(--border-subtle)",
                 borderRadius: "var(--radius-md)",
                 color: "var(--text-primary)", fontSize: 14,
@@ -2224,7 +2215,7 @@ function AuthModal({ show, onClose, isLogin, setIsLogin, setUser, setJoinedEvent
                   onChange={(e) => setDepartment(e.target.value)}
                   style={{
                     width: "100%", padding: "11px 14px",
-                    background: "rgba(255,255,255,0.04)",
+                    background: "var(--bg-input)",
                     border: "1px solid var(--border-subtle)",
                     borderRadius: "var(--radius-md)",
                     color: "var(--text-primary)", fontSize: 14,
@@ -2237,11 +2228,11 @@ function AuthModal({ show, onClose, isLogin, setIsLogin, setUser, setJoinedEvent
                   onFocus={(e) => e.target.style.borderColor = "var(--accent-blue)"}
                   onBlur={(e) => e.target.style.borderColor = "var(--border-subtle)"}
                 >
-                  <option value="" disabled style={{ background: "#1e1b4b" }}>Select Dept</option>
-                  <option value="MCA" style={{ background: "#1e1b4b" }}>MCA</option>
-                  <option value="MSC Cyber security" style={{ background: "#1e1b4b" }}>MSC Cyber security</option>
-                  <option value="BCA" style={{ background: "#1e1b4b" }}>BCA</option>
-                  <option value="BSC" style={{ background: "#1e1b4b" }}>BSC</option>
+                  <option value="" disabled>Select Dept</option>
+                  <option value="MCA">MCA</option>
+                  <option value="MSC Cyber security">MSC Cyber security</option>
+                  <option value="BCA">BCA</option>
+                  <option value="BSC">BSC</option>
                 </select>
               </div>
               <div>
@@ -2255,7 +2246,7 @@ function AuthModal({ show, onClose, isLogin, setIsLogin, setUser, setJoinedEvent
                   onChange={(e) => setYear(e.target.value)}
                   style={{
                     width: "100%", padding: "11px 14px",
-                    background: "rgba(255,255,255,0.04)",
+                    background: "var(--bg-input)",
                     border: "1px solid var(--border-subtle)",
                     borderRadius: "var(--radius-md)",
                     color: "var(--text-primary)", fontSize: 14,
@@ -2268,10 +2259,10 @@ function AuthModal({ show, onClose, isLogin, setIsLogin, setUser, setJoinedEvent
                   onFocus={(e) => e.target.style.borderColor = "var(--accent-blue)"}
                   onBlur={(e) => e.target.style.borderColor = "var(--border-subtle)"}
                 >
-                  <option value="" disabled style={{ background: "#1e1b4b" }}>Year</option>
-                  <option value="I" style={{ background: "#1e1b4b" }}>I</option>
-                  <option value="II" style={{ background: "#1e1b4b" }}>II</option>
-                  <option value="III" style={{ background: "#1e1b4b" }}>III</option>
+                  <option value="" disabled>Year</option>
+                  <option value="I">I</option>
+                  <option value="II">II</option>
+                  <option value="III">III</option>
                 </select>
               </div>
             </div>
@@ -2294,7 +2285,7 @@ function AuthModal({ show, onClose, isLogin, setIsLogin, setUser, setJoinedEvent
                 onKeyDown={(e) => { if (e.key === "Enter") handleSubmit(); }}
                 style={{
                   width: "100%", padding: "11px 44px 11px 14px",
-                  background: "rgba(255,255,255,0.04)",
+                  background: "var(--bg-input)",
                   border: "1px solid var(--border-subtle)",
                   borderRadius: "var(--radius-md)",
                   color: "var(--text-primary)", fontSize: 14,
@@ -2385,7 +2376,7 @@ function AuthModal({ show, onClose, isLogin, setIsLogin, setUser, setJoinedEvent
 }
 
 /* ---------- Profile Page ---------- */
-function ProfilePage({ user, setPage, setUser, setJoinedEvents, joinedIds = [] }) {
+function ProfilePage({ user, setPage, setUser, setJoinedEvents, joinedIds = [], events }) {
   const [attendedEvents, setAttendedEvents] = useState([]);
   const [loadingAttended, setLoadingAttended] = useState(true);
 
@@ -2452,8 +2443,11 @@ function ProfilePage({ user, setPage, setUser, setJoinedEvents, joinedIds = [] }
           </h3>
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             {joinedIds.length > 0 ? (
-              EVENTS.filter(ev => joinedIds.includes(ev.id)).map(ev => (
-                <div key={ev.id} style={{ padding: 12, background: "rgba(255,255,255,0.04)", borderRadius: "var(--radius-md)", border: "1px solid var(--border-subtle)" }}>
+              (events || []).filter(ev => {
+                const evIdStr = (ev._id || ev.id)?.toString();
+                return joinedIds.some(jid => jid.toString() === evIdStr);
+              }).map(ev => (
+                <div key={ev._id || ev.id} style={{ padding: 12, background: "rgba(255,255,255,0.04)", borderRadius: "var(--radius-md)", border: "1px solid var(--border-subtle)" }}>
                   <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 4 }}>{ev.title}</div>
                   <div style={{ fontSize: 12, color: "var(--text-muted)" }}>Registered for {ev.date}</div>
                 </div>
@@ -2506,11 +2500,13 @@ function App() {
   const [isLogin, setIsLogin] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [user, setUser] = useState(null);
-  const [stats, setStats] = useState({ activeStudents: 2500, annualEvents: 120, dynamicCommunities: 15 });
+  const [stats, setStats] = useState({ activeStudents: 0, annualEvents: 0, dynamicCommunities: 0, totalRegistrations: 0 });
   const [theme, setTheme] = useState("dark");
   const [toasts, setToasts] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
-  const [joinedEvents, setJoinedEvents] = useState([]); // Empty initially
+  const [joinedEvents, setJoinedEvents] = useState([]);
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const addToast = (message, type = "info") => {
     const id = Date.now();
@@ -2564,16 +2560,23 @@ function App() {
   }, [user, page]);
 
   useEffect(() => {
-    const fetchStats = async () => {
+    const fetchData = async () => {
+      setLoading(true);
       try {
-        const response = await fetch("http://localhost:5000/api/stats");
-        const data = await response.json();
-        setStats(data);
+        const [statsRes, eventsRes] = await Promise.all([
+          fetch("http://localhost:5000/api/stats"),
+          fetch("http://localhost:5000/api/events")
+        ]);
+        const statsData = await statsRes.json();
+        const eventsData = await eventsRes.json();
+        setStats(statsData);
+        setEvents(eventsData);
       } catch (err) {
-        console.error("Failed to fetch stats:", err);
+        console.error("Failed to fetch data:", err);
       }
+      setLoading(false);
     };
-    fetchStats();
+    fetchData();
   }, []);
 
 
@@ -2600,18 +2603,25 @@ function App() {
           user={user}
           theme={theme}
           toggleTheme={toggleTheme}
+          setUser={setUser}
+          setJoinedEvents={setJoinedEvents}
         />
 
         <main style={{ flex: 1, overflowY: "auto" }}>
-          {user?.role === "admin" ? (
+          {loading ? (
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100%", gap: 20 }}>
+              <div className="spinner" style={{ width: 40, height: 40, border: "3px solid rgba(99,102,241,0.1)", borderTopColor: "var(--accent-indigo)", borderRadius: "50%", animation: "spin 1s linear infinite" }}></div>
+              <p style={{ color: "var(--text-muted)", fontSize: 14, fontWeight: 500 }}>Syncing CampusFlux...</p>
+            </div>
+          ) : user?.role === "admin" ? (
             <AdminPage adminPage={page} user={user} setUser={setUser} setPage={setPage} />
           ) : (
             <>
               {page === "home" && <HomePage setPage={setPage} setShowAuth={setShowAuth} stats={stats} />}
-              {page === "profile" && <ProfilePage user={user} setPage={setPage} setUser={setUser} setJoinedEvents={setJoinedEvents} joinedIds={joinedEvents} />}
-              {page === "dashboard" && <DashboardPage setPage={setPage} onEventClick={setSelectedEvent} />}
-              {page === "explore" && <ExplorePage searchQuery={searchQuery} onEventClick={setSelectedEvent} />}
-              {page === "events" && <MyEventsPage user={user} joinedIds={joinedEvents} onEventClick={setSelectedEvent} setPage={setPage} setShowAuth={setShowAuth} />}
+              {page === "profile" && <ProfilePage user={user} setPage={setPage} setUser={setUser} setJoinedEvents={setJoinedEvents} joinedIds={joinedEvents} events={events} />}
+              {page === "dashboard" && <DashboardPage setPage={setPage} onEventClick={setSelectedEvent} events={events} stats={stats} />}
+              {page === "explore" && <ExplorePage searchQuery={searchQuery} onEventClick={setSelectedEvent} events={events} />}
+              {page === "events" && <MyEventsPage user={user} joinedIds={joinedEvents} onEventClick={setSelectedEvent} setPage={setPage} setShowAuth={setShowAuth} events={events} />}
               {page === "leaderboard" && <LeaderboardPage />}
               {page === "communities" && <CommunitiesPage />}
             </>
