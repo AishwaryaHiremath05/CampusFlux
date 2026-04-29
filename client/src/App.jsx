@@ -854,9 +854,6 @@ function DashboardPage({ setPage, onEventClick, events, stats }) {
         }} />
 
         <div style={{ padding: "40px 36px", position: "relative", zIndex: 1 }}>
-          <span className="badge badge-purple" style={{ marginBottom: 14 }}>
-            <Sparkles size={10} /> Welcome Back
-          </span>
           <h2 style={{
             fontFamily: "var(--font-display)", fontSize: 32,
             fontWeight: 800, lineHeight: 1.2, marginBottom: 10,
@@ -872,9 +869,6 @@ function DashboardPage({ setPage, onEventClick, events, stats }) {
             <button className="btn-primary" onClick={() => setPage("explore")}
               style={{ display: "flex", alignItems: "center", gap: 8 }}>
               Browse Events <ArrowRight size={16} />
-            </button>
-            <button className="btn-outline" onClick={() => setPage("leaderboard")}>
-              View Leaderboard
             </button>
           </div>
         </div>

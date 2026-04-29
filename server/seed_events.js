@@ -78,7 +78,7 @@ const CSIBER_EVENTS = [
   {
     title: "Integrated Global Sustainability",
     category: "Conference",
-    date: "Dec 5, 2026",
+    date: "Dec 4, 2026",
     time: "9:30 AM",
     location: "Main Auditorium",
     maxAttendees: 400,
