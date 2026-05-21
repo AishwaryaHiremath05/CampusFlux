@@ -8,8 +8,57 @@ const Event = require("./models/Event");
 const Community = require("./models/Community");
 const Registration = require("./models/Registration");
 const Leaderboard = require("./models/Leaderboard");
+const nodemailer = require("nodemailer");
 
 dotenv.config();
+
+// Helper to send registration confirmation email
+const sendRegistrationEmail = async (userEmail, userName, eventName, eventDate, eventLocation) => {
+  const transporter = nodemailer.createTransport({
+    service: process.env.EMAIL_SERVICE || "gmail",
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS
+    }
+  });
+
+  const mailOptions = {
+    from: `"CampusFlux" <${process.env.EMAIL_USER || "noreply@campusflux.com"}>`,
+    to: userEmail,
+    subject: `Registration Confirmed: ${eventName} | CampusFlux`,
+    html: `
+      <div style="font-family: sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px; background-color: #ffffff;">
+        <div style="text-align: center; border-bottom: 2px solid #3b82f6; padding-bottom: 15px; margin-bottom: 20px;">
+          <h2 style="color: #3b82f6; margin: 0; font-size: 24px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">CampusFlux Event Hub</h2>
+        </div>
+        <p style="font-size: 16px; color: #334155;">Dear <strong>${userName}</strong>,</p>
+        <p style="font-size: 16px; color: #334155; line-height: 1.5;">Congratulations! You have successfully registered for the upcoming campus event. Here are your event details:</p>
+        <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; border-left: 4px solid #3b82f6; margin: 25px 0;">
+          <h3 style="margin-top: 0; margin-bottom: 12px; color: #1e293b; font-size: 18px;">${eventName}</h3>
+          <p style="margin: 6px 0; color: #475569; font-size: 14px;"><strong>📅 Date:</strong> ${eventDate}</p>
+          <p style="margin: 6px 0; color: #475569; font-size: 14px;"><strong>📍 Location:</strong> ${eventLocation}</p>
+        </div>
+        <p style="font-size: 16px; color: #334155; line-height: 1.5;">Please arrive on time. We look forward to your active participation!</p>
+        <p style="font-size: 12px; color: #64748b; margin-top: 40px; border-top: 1px solid #e2e8f0; padding-top: 20px; text-align: center;">
+          This is an automated confirmation email from CampusFlux.
+        </p>
+      </div>
+    `
+  };
+
+  try {
+    if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+      await transporter.sendMail(mailOptions);
+      console.log(`✉️ Confirmation email sent successfully to ${userEmail}`);
+    } else {
+      console.log("⚠️ EMAIL_USER or EMAIL_PASS not defined. Printing registration details to console:");
+      console.log(`To: ${userEmail}\nSubject: ${mailOptions.subject}\nContent:\\n${mailOptions.html}`);
+    }
+  } catch (error) {
+    console.error("❌ Error sending registration email:", error.message);
+  }
+};
+
 const app = express();
 const PORT = 5000;
 
@@ -188,6 +237,17 @@ app.post("/api/users/:userId/join", async (req, res) => {
       return res.status(404).json({ message: "Event not found" });
     }
 
+    // Check if event has already occurred
+    const eventDate = new Date(event.date);
+    if (!isNaN(eventDate.getTime())) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      eventDate.setHours(0, 0, 0, 0);
+      if (eventDate < today) {
+        return res.status(400).json({ message: "This event has already occurred. Registrations are closed." });
+      }
+    }
+
     // Check if already registered
     const existingRegistration = await Registration.findOne({ userId, eventId });
     if (existingRegistration) {
@@ -207,6 +267,9 @@ app.post("/api/users/:userId/join", async (req, res) => {
     // Update event attendees count
     event.attendees = (event.attendees || 0) + 1;
     await event.save();
+
+    // Send confirmation email
+    sendRegistrationEmail(user.email, user.fullName, event.title, event.date, event.location);
 
     res.status(200).json({ message: "Joined event successfully", joinedEvents: user.joinedEvents });
   } catch (err) {

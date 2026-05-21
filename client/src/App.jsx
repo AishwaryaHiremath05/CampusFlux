@@ -1,12 +1,15 @@
 import { useState, useEffect, useRef } from "react";
+import { jsPDF } from "jspdf";
 import {
   Search, User, Sun, Moon, Menu, X, Calendar, Award, Star, Home,
   TrendingUp, Users, Zap, ChevronRight, Bell, Settings,
   LogOut, Heart, MapPin, Clock, ArrowRight, Sparkles,
   BookOpen, Trophy, Target, BarChart3, Globe, Shield,
   ExternalLink, Filter, ChevronDown, Check, AlertCircle, Eye, EyeOff,
-  Mail, Phone, GraduationCap
+  Mail, Phone, GraduationCap, Download
 } from "lucide-react";
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 // ============================================================
 // DATA
@@ -106,7 +109,7 @@ function EventDetailModal({ event, onClose, onJoin, isJoined }) {
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-            <div className="card" style={{ padding: 20, background: "rgba(255,255,255,0.02)" }}>
+            <div className="card" style={{ padding: 20, background: "var(--bg-subtle-overlay)" }}>
               <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                   <Calendar size={18} color="var(--accent-blue)" />
@@ -136,7 +139,7 @@ function EventDetailModal({ event, onClose, onJoin, isJoined }) {
               <div style={{ fontSize: 13, color: "var(--text-muted)", marginBottom: 12 }}>
                 {event.attendees} / {event.maxAttendees} slots filled
               </div>
-              <div style={{ height: 6, background: "rgba(255,255,255,0.06)", borderRadius: 3, marginBottom: 20, overflow: "hidden" }}>
+              <div style={{ height: 6, background: "var(--bg-subtle-track)", borderRadius: 3, marginBottom: 20, overflow: "hidden" }}>
                 <div style={{ width: `${(event.attendees / event.maxAttendees) * 100}%`, height: "100%", background: event.gradient }} />
               </div>
               <button
@@ -197,7 +200,7 @@ function ProgressRing({ percent, size = 48, strokeWidth = 4, color = "#3b82f6" }
   return (
     <svg width={size} height={size} style={{ transform: "rotate(-90deg)" }}>
       <circle cx={size / 2} cy={size / 2} r={r} fill="none"
-        stroke="rgba(255,255,255,0.06)" strokeWidth={strokeWidth} />
+        stroke="var(--bg-subtle-track)" strokeWidth={strokeWidth} />
       <circle cx={size / 2} cy={size / 2} r={r} fill="none"
         stroke={color} strokeWidth={strokeWidth}
         strokeDasharray={c} strokeDashoffset={offset}
@@ -292,7 +295,7 @@ function Sidebar({ page, setPage, collapsed, setCollapsed, setShowAuth, user, se
                 position: "relative",
               }}
               onMouseEnter={(e) => {
-                if (page !== item.id) e.currentTarget.style.background = "rgba(255,255,255,0.04)";
+                if (page !== item.id) e.currentTarget.style.background = "var(--bg-subtle-tag)";
               }}
               onMouseLeave={(e) => {
                 if (page !== item.id) e.currentTarget.style.background = "transparent";
@@ -424,7 +427,7 @@ function TopBar({ page, setPage, setShowAuth, searchQuery, setSearchQuery, user,
         {/* Search */}
         <div style={{
           display: "flex", alignItems: "center",
-          background: "rgba(255,255,255,0.04)",
+          background: "var(--bg-subtle-tag)",
           border: "1px solid var(--border-subtle)",
           borderRadius: "var(--radius-full)", padding: "7px 16px",
           transition: "all 0.3s ease", minWidth: 220,
@@ -438,7 +441,17 @@ function TopBar({ page, setPage, setShowAuth, searchQuery, setSearchQuery, user,
             type="text"
             placeholder="Search events, people..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              if (e.target.value.length > 0 && page !== "explore") {
+                setPage("explore");
+              }
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && searchQuery.trim().length > 0 && page !== "explore") {
+                setPage("explore");
+              }
+            }}
             style={{
               background: "transparent", border: "none", outline: "none",
               color: "var(--text-primary)", marginLeft: 8, fontSize: 13,
@@ -453,7 +466,7 @@ function TopBar({ page, setPage, setShowAuth, searchQuery, setSearchQuery, user,
             onClick={toggleTheme}
             style={{
               width: 36, height: 36, borderRadius: "var(--radius-full)",
-              background: "rgba(255,255,255,0.04)", border: "1px solid var(--border-subtle)",
+              background: "var(--bg-subtle-tag)", border: "1px solid var(--border-subtle)",
               cursor: "pointer", color: "var(--text-primary)",
               display: "flex", alignItems: "center", justifyContent: "center",
               transition: "all 0.2s ease",
@@ -659,7 +672,7 @@ function EventCard({ event, onClick, delay = 0 }) {
             <span>{fillPercent}% full</span>
           </div>
           <div style={{
-            height: 4, background: "rgba(255,255,255,0.06)",
+            height: 4, background: "var(--bg-subtle-track)",
             borderRadius: "var(--radius-full)", overflow: "hidden",
           }}>
             <div style={{
@@ -676,7 +689,7 @@ function EventCard({ event, onClick, delay = 0 }) {
             <span key={tag} style={{
               fontSize: 11, padding: "3px 8px",
               borderRadius: "var(--radius-full)",
-              background: "rgba(255,255,255,0.04)",
+              background: "var(--bg-subtle-tag)",
               border: "1px solid var(--border-subtle)",
               color: "var(--text-secondary)",
             }}>
@@ -712,7 +725,7 @@ function HomePage({ setPage, setShowAuth, stats }) {
       }}>
         {/* Clean Hero */}
 
-        <div className="badge animate-fade-in-scale" style={{ marginBottom: 20, background: "rgba(255,255,255,0.05)", border: "1px solid var(--border-subtle)" }}>
+        <div className="badge animate-fade-in-scale" style={{ marginBottom: 20, background: "var(--bg-subtle-tag)", border: "1px solid var(--border-subtle)" }}>
           Discover Your Campus
         </div>
 
@@ -815,7 +828,7 @@ function HomePage({ setPage, setShowAuth, stats }) {
       <section style={{
         marginTop: "auto",
         padding: "60px 40px",
-        background: "rgba(255,255,255,0.02)",
+        background: "var(--bg-subtle-overlay)",
         borderTop: "1px solid var(--border-subtle)",
         textAlign: "center"
       }}>
@@ -829,7 +842,17 @@ function HomePage({ setPage, setShowAuth, stats }) {
 
 /* ---------- Dashboard Page ---------- */
 function DashboardPage({ setPage, onEventClick, events, stats }) {
-  const displayEvents = events?.length > 0 ? events.slice(0, 4) : [];
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const upcomingEvents = (events || []).filter(ev => {
+    const evDate = new Date(ev.date);
+    if (isNaN(evDate.getTime())) return true; // fallback: keep if invalid
+    evDate.setHours(0, 0, 0, 0);
+    return evDate >= today;
+  });
+
+  const displayEvents = upcomingEvents.slice(0, 4);
 
   return (
     <div className="animate-fade-in" style={{ padding: "28px 32px" }}>
@@ -837,7 +860,7 @@ function DashboardPage({ setPage, onEventClick, events, stats }) {
       <div className="card" style={{
         padding: 0, marginBottom: 28, overflow: "hidden",
         position: "relative", border: "none",
-        background: "linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #172554 100%)",
+        background: "var(--bg-dashboard-hero)",
       }}>
         {/* Floating orbs */}
         <div style={{
@@ -858,139 +881,69 @@ function DashboardPage({ setPage, onEventClick, events, stats }) {
             fontFamily: "var(--font-display)", fontSize: 32,
             fontWeight: 800, lineHeight: 1.2, marginBottom: 10,
           }}>
-            Discover What's <br />
-            <span className="gradient-text-hero">Happening on Campus</span>
+            Empowering Students <br />
+            <span className="gradient-text-hero">Beyond Classrooms</span>
           </h2>
-          <p style={{ color: "var(--text-secondary)", fontSize: 15, maxWidth: 480, marginBottom: 24 }}>
-            Stay connected with {stats?.annualEvents || 0} events and join {stats?.activeStudents || 0} students.
-            Your campus experience, supercharged.
+          <p style={{ color: "var(--text-secondary)", fontSize: 15, maxWidth: 520, marginBottom: 24, lineHeight: 1.6 }}>
+            Learn, network, and grow through exciting campus events.
           </p>
           <div style={{ display: "flex", gap: 12 }}>
             <button className="btn-primary" onClick={() => setPage("explore")}
-              style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              Browse Events <ArrowRight size={16} />
+              style={{ display: "flex", alignItems: "center", gap: 8, padding: "12px 24px" }}>
+              Explore Campus Opportunities <ArrowRight size={16} />
             </button>
           </div>
         </div>
       </div>
 
-      {/* Two Column Section */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24, marginBottom: 32 }}>
-        {/* Upcoming Events */}
-        <div>
-          <div style={{
-            display: "flex", justifyContent: "space-between", alignItems: "center",
-            marginBottom: 16,
-          }}>
-            <h3 style={{ fontFamily: "var(--font-display)", fontSize: 18, fontWeight: 700 }}>
-              Upcoming Events
-            </h3>
-            <button className="btn-ghost" onClick={() => setPage("explore")}
-              style={{ fontSize: 13, display: "flex", alignItems: "center", gap: 4 }}>
-              View All <ChevronRight size={14} />
-            </button>
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 10 }} className="stagger-children">
-            {displayEvents.length === 0 ? (
-              <div className="card" style={{ padding: 32, textAlign: "center", color: "var(--text-muted)" }}>
-                No upcoming events found.
-              </div>
-            ) : displayEvents.map((ev) => (
-              <div
-                key={ev._id || ev.id}
-                className="card"
-                onClick={() => onEventClick(ev)}
-                style={{
-                  padding: "14px 16px", display: "flex", alignItems: "center", gap: 14, cursor: "pointer"
-                }}
-              >
-                <div style={{
-                  width: 44, height: 44, borderRadius: "var(--radius-md)",
-                  background: ev.gradient || "var(--gradient-primary)", display: "flex",
-                  alignItems: "center", justifyContent: "center",
-                  flexShrink: 0, fontSize: 18,
-                }}>
-                  {ev.category === "Hackathon" ? "⚡" : ev.category === "Workshop" ? "🔧" : ev.category === "Talk" ? "🎤" : "🏆"}
-                </div>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 2 }}>{ev.title}</div>
-                  <div style={{ fontSize: 12, color: "var(--text-muted)", display: "flex", gap: 10 }}>
-                    <span>{ev.date}</span>
-                    <span>{ev.time}</span>
-                  </div>
-                </div>
-                <span className={`badge ${ev.category === "Hackathon" ? "badge-blue" : ev.category === "Workshop" ? "badge-purple" : ev.category === "Talk" ? "badge-emerald" : "badge-amber"}`}>
-                  {ev.category}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Quick Stats / Activity */}
-        <div>
-          <h3 style={{
-            fontFamily: "var(--font-display)", fontSize: 18, fontWeight: 700,
-            marginBottom: 16,
-          }}>
-            Activity Overview
+      {/* Upcoming Events Section */}
+      <div style={{ marginBottom: 32 }}>
+        <div style={{
+          display: "flex", justifyContent: "space-between", alignItems: "center",
+          marginBottom: 16,
+        }}>
+          <h3 style={{ fontFamily: "var(--font-display)", fontSize: 18, fontWeight: 700 }}>
+            Upcoming Events
           </h3>
-          <div className="card" style={{ padding: 24 }}>
-            {/* Mini chart representation */}
-            <div style={{ display: "flex", alignItems: "flex-end", gap: 6, height: 120, marginBottom: 20 }}>
-              {[35, 55, 40, 75, 60, 85, 70, 90, 65, 80, 95, 72].map((h, i) => (
-                <div key={i} style={{
-                  flex: 1, height: `${h}%`,
-                  background: i === 10
-                    ? "var(--gradient-primary)"
-                    : "rgba(59,130,246,0.15)",
-                  borderRadius: "4px 4px 0 0",
-                  transition: "height 0.6s ease-out",
-                  transitionDelay: `${i * 0.05}s`,
-                  position: "relative",
-                }}>
-                  {i === 10 && (
-                    <div style={{
-                      position: "absolute", top: -8,
-                      left: "50%", transform: "translateX(-50%)",
-                      width: 6, height: 6, borderRadius: "50%",
-                      background: "#3b82f6",
-                      boxShadow: "0 0 10px rgba(59,130,246,0.5)",
-                    }} />
-                  )}
+          <button className="btn-ghost" onClick={() => setPage("explore")}
+            style={{ fontSize: 13, display: "flex", alignItems: "center", gap: 4 }}>
+            View All <ChevronRight size={14} />
+          </button>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }} className="stagger-children">
+          {displayEvents.length === 0 ? (
+            <div className="card" style={{ padding: 32, textAlign: "center", color: "var(--text-muted)" }}>
+              No upcoming events found.
+            </div>
+          ) : displayEvents.map((ev) => (
+            <div
+              key={ev._id || ev.id}
+              className="card"
+              onClick={() => onEventClick(ev)}
+              style={{
+                padding: "14px 16px", display: "flex", alignItems: "center", gap: 14, cursor: "pointer"
+              }}
+            >
+              <div style={{
+                width: 44, height: 44, borderRadius: "var(--radius-md)",
+                background: ev.gradient || "var(--gradient-primary)", display: "flex",
+                alignItems: "center", justifyContent: "center",
+                flexShrink: 0, fontSize: 18,
+              }}>
+                {ev.category === "Hackathon" ? "⚡" : ev.category === "Workshop" ? "🔧" : ev.category === "Talk" ? "🎤" : "🏆"}
+              </div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 2 }}>{ev.title}</div>
+                <div style={{ fontSize: 12, color: "var(--text-muted)", display: "flex", gap: 10 }}>
+                  <span>{ev.date}</span>
+                  <span>{ev.time}</span>
                 </div>
-              ))}
-            </div>
-            <div style={{
-              display: "flex", justifyContent: "space-between",
-              fontSize: 11, color: "var(--text-muted)",
-            }}>
-              <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span>
-              <span>May</span><span>Jun</span><span>Jul</span><span>Aug</span>
-              <span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
-            </div>
-
-            <div style={{
-              marginTop: 20, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12,
-            }}>
-              <div style={{
-                padding: 14, borderRadius: "var(--radius-md)",
-                background: "rgba(59,130,246,0.06)",
-                border: "1px solid rgba(59,130,246,0.1)",
-              }}>
-                <div style={{ fontSize: 20, fontWeight: 700, fontFamily: "var(--font-display)" }}>{stats?.totalRegistrations || 0}</div>
-                <div style={{ fontSize: 12, color: "var(--text-muted)" }}>Total Registrations</div>
               </div>
-              <div style={{
-                padding: 14, borderRadius: "var(--radius-md)",
-                background: "rgba(139,92,246,0.06)",
-                border: "1px solid rgba(139,92,246,0.1)",
-              }}>
-                <div style={{ fontSize: 20, fontWeight: 700, fontFamily: "var(--font-display)" }}>{stats?.annualEvents || 0}</div>
-                <div style={{ fontSize: 12, color: "var(--text-muted)" }}>Active Events</div>
-              </div>
+              <span className={`badge ${ev.category === "Hackathon" ? "badge-blue" : ev.category === "Workshop" ? "badge-purple" : ev.category === "Talk" ? "badge-emerald" : "badge-amber"}`}>
+                {ev.category}
+              </span>
             </div>
-          </div>
+          ))}
         </div>
       </div>
 
@@ -1070,14 +1023,30 @@ function DashboardPage({ setPage, onEventClick, events, stats }) {
 /* ---------- Explore Page ---------- */
 function ExplorePage({ searchQuery, onEventClick, events }) {
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const categories = ["All", "Hackathon", "Workshop", "Talk", "Competition", "Festival"];
+  const categories = ["All", "Hackathon", "Workshop", "Talk", "Competition", "Festival", "Past Events"];
 
   const filtered = (events || []).filter((e) => {
-    const matchCat = selectedCategory === "All" || e.category === selectedCategory;
-    const matchSearch = !searchQuery ||
-      e.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      e.category.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchCat && matchSearch;
+    const evDate = new Date(e.date);
+    const isValid = !isNaN(evDate.getTime());
+    
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (isValid) evDate.setHours(0, 0, 0, 0);
+
+    const isPast = isValid && evDate < today;
+
+    if (selectedCategory === "Past Events") {
+      const matchSearch = !searchQuery ||
+        e.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        e.category.toLowerCase().includes(searchQuery.toLowerCase());
+      return isPast && matchSearch;
+    } else {
+      const matchCat = selectedCategory === "All" || e.category === selectedCategory;
+      const matchSearch = !searchQuery ||
+        e.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        e.category.toLowerCase().includes(searchQuery.toLowerCase());
+      return !isPast && matchCat && matchSearch;
+    }
   });
 
   return (
@@ -1116,7 +1085,15 @@ function ExplorePage({ searchQuery, onEventClick, events }) {
           <div style={{
             display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 18,
           }}>
-            {(events || []).filter(e => e.featured).map((event, i) => (
+            {(events || []).filter(e => {
+              const evDate = new Date(e.date);
+              const isValid = !isNaN(evDate.getTime());
+              const today = new Date();
+              today.setHours(0, 0, 0, 0);
+              if (isValid) evDate.setHours(0, 0, 0, 0);
+              const isPast = isValid && evDate < today;
+              return e.featured && !isPast;
+            }).map((event, i) => (
               <EventCard key={event._id || event.id} event={event} delay={i * 0.15} onClick={() => onEventClick(event)} />
             ))}
           </div>
@@ -1238,7 +1215,7 @@ function MyEventsPage({ user, joinedIds = [], onEventClick, setPage, setShowAuth
           ))}
         </div>
       ) : (
-        <div className="card" style={{ padding: 60, textAlign: "center", background: "rgba(255,255,255,0.02)" }}>
+        <div className="card" style={{ padding: 60, textAlign: "center", background: "var(--bg-subtle-overlay)" }}>
           <Calendar size={48} color="var(--text-muted)" style={{ margin: "0 auto 20px", opacity: 0.3 }} />
           <h4 style={{ fontSize: 18, fontWeight: 600, marginBottom: 8 }}>No registrations yet</h4>
           <p style={{ color: "var(--text-muted)", marginBottom: 24 }}>You haven't registered for any events. Start exploring!</p>
@@ -1246,24 +1223,7 @@ function MyEventsPage({ user, joinedIds = [], onEventClick, setPage, setShowAuth
         </div>
       )}
 
-      {/* Suggestion */}
-      {myEvents.length > 0 && (
-        <div className="card" style={{
-          marginTop: 28, padding: 32, textAlign: "center",
-          background: "var(--gradient-card)",
-        }}>
-          <Sparkles size={28} color="#8b5cf6" style={{ margin: "0 auto 12px" }} />
-          <h4 style={{ fontFamily: "var(--font-display)", fontSize: 16, fontWeight: 600, marginBottom: 6 }}>
-            Explore More Events
-          </h4>
-          <p style={{ fontSize: 13, color: "var(--text-muted)", marginBottom: 16 }}>
-            Check out upcoming hackathons, workshops, and more!
-          </p>
-          <button className="btn-outline" style={{ fontSize: 13 }}>
-            <Globe size={14} style={{ marginRight: 6 }} /> Discover Events
-          </button>
-        </div>
-      )}
+
     </div>
   );
 }
@@ -1385,7 +1345,7 @@ function LeaderboardPage() {
                 borderBottom: "1px solid var(--border-subtle)",
                 transition: "background 0.2s",
               }}
-                onMouseEnter={(e) => e.currentTarget.style.background = "rgba(255,255,255,0.02)"}
+                onMouseEnter={(e) => e.currentTarget.style.background = "var(--bg-subtle-overlay)"}
                 onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
               >
                 <td style={{ padding: "14px 24px", fontWeight: 700, fontFamily: "var(--font-display)" }}>
@@ -1502,7 +1462,7 @@ function AdminDashboard({ stats }) {
         </div>
         <table style={{ width: "100%", borderCollapse: "collapse" }}>
           <thead>
-            <tr style={{ background: "rgba(255,255,255,0.02)", borderBottom: "1px solid var(--border-subtle)", fontSize: 12, color: "var(--text-muted)", textTransform: "uppercase" }}>
+            <tr style={{ background: "var(--bg-subtle-overlay)", borderBottom: "1px solid var(--border-subtle)", fontSize: 12, color: "var(--text-muted)", textTransform: "uppercase" }}>
               <th style={{ padding: "14px 24px", textAlign: "left" }}>Student</th>
               <th style={{ padding: "14px 24px", textAlign: "left" }}>Event</th>
               <th style={{ padding: "14px 24px", textAlign: "left" }}>Date</th>
@@ -1591,7 +1551,7 @@ function AdminManageEvents({ events, onEdit, onDelete, onAdd }) {
         <div className="card" style={{ padding: 0, overflow: "hidden" }}>
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
             <thead>
-              <tr style={{ background: "rgba(255,255,255,0.02)", borderBottom: "1px solid var(--border-subtle)", fontSize: 12, color: "var(--text-muted)", textTransform: "uppercase" }}>
+              <tr style={{ background: "var(--bg-subtle-overlay)", borderBottom: "1px solid var(--border-subtle)", fontSize: 12, color: "var(--text-muted)", textTransform: "uppercase" }}>
                 <th style={{ padding: "14px 24px", textAlign: "left" }}>Event Name</th>
                 <th style={{ padding: "14px 24px", textAlign: "left" }}>Date & Time</th>
                 <th style={{ padding: "14px 24px", textAlign: "left" }}>Venue</th>
@@ -1634,7 +1594,7 @@ function AdminRegistrations({ events }) {
   const fetchRegistrations = async (eventId) => {
     setLoading(true);
     try {
-      const res = await fetch(`http://localhost:5000/api/admin/registrations/${eventId}`);
+      const res = await fetch(`${API_BASE_URL}/api/admin/registrations/${eventId}`);
       const data = await res.json();
       setRegistrations(data);
     } catch (err) { console.error(err); }
@@ -1678,7 +1638,7 @@ function AdminRegistrations({ events }) {
               </div>
               <table style={{ width: "100%", borderCollapse: "collapse" }}>
                 <thead>
-                  <tr style={{ background: "rgba(255,255,255,0.02)", borderBottom: "1px solid var(--border-subtle)", fontSize: 12, color: "var(--text-muted)", textTransform: "uppercase" }}>
+                  <tr style={{ background: "var(--bg-subtle-overlay)", borderBottom: "1px solid var(--border-subtle)", fontSize: 12, color: "var(--text-muted)", textTransform: "uppercase" }}>
                     <th style={{ padding: "14px 24px", textAlign: "left" }}>Student Name</th>
                     <th style={{ padding: "14px 24px", textAlign: "left" }}>Email</th>
                     <th style={{ padding: "14px 24px", textAlign: "left" }}>Dept / Year</th>
@@ -1720,7 +1680,7 @@ function AdminAttendance({ events }) {
   const fetchRegistrations = async (eventId) => {
     setLoading(true);
     try {
-      const res = await fetch(`http://localhost:5000/api/admin/registrations/${eventId}`);
+      const res = await fetch(`${API_BASE_URL}/api/admin/registrations/${eventId}`);
       const data = await res.json();
       setRegistrations(data);
     } catch (err) { console.error(err); }
@@ -1734,7 +1694,7 @@ function AdminAttendance({ events }) {
 
   const toggleAttendance = async (regId, currentStatus) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/admin/attendance`, {
+      const res = await fetch(`${API_BASE_URL}/api/admin/attendance`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ registrationId: regId, attended: !currentStatus })
@@ -1782,7 +1742,7 @@ function AdminAttendance({ events }) {
               </div>
               <table style={{ width: "100%", borderCollapse: "collapse" }}>
                 <thead>
-                  <tr style={{ background: "rgba(255,255,255,0.02)", borderBottom: "1px solid var(--border-subtle)", fontSize: 12, color: "var(--text-muted)", textTransform: "uppercase" }}>
+                  <tr style={{ background: "var(--bg-subtle-overlay)", borderBottom: "1px solid var(--border-subtle)", fontSize: 12, color: "var(--text-muted)", textTransform: "uppercase" }}>
                     <th style={{ padding: "14px 24px", textAlign: "left" }}>Student Name</th>
                     <th style={{ padding: "14px 24px", textAlign: "left" }}>Department</th>
                     <th style={{ padding: "14px 24px", textAlign: "center" }}>Attendance</th>
@@ -1836,7 +1796,7 @@ function AdminLeaderboard() {
 
   const fetchEntries = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/leaderboard");
+      const res = await fetch(`${API_BASE_URL}/api/leaderboard`);
       const data = await res.json();
       setEntries(data);
     } catch (err) { console.error(err); }
@@ -1848,7 +1808,7 @@ function AdminLeaderboard() {
   const handleAdd = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:5000/api/admin/leaderboard", {
+      const res = await fetch(`${API_BASE_URL}/api/admin/leaderboard`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -1869,7 +1829,7 @@ function AdminLeaderboard() {
   const handleDelete = async (id) => {
     if (!window.confirm("Remove this entry?")) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/admin/leaderboard/${id}`, { method: "DELETE" });
+      const res = await fetch(`${API_BASE_URL}/api/admin/leaderboard/${id}`, { method: "DELETE" });
       if (res.ok) fetchEntries();
     } catch (err) { console.error(err); }
   };
@@ -1914,7 +1874,7 @@ function AdminLeaderboard() {
         <div className="card" style={{ padding: 0, overflow: "hidden" }}>
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
             <thead>
-              <tr style={{ background: "rgba(255,255,255,0.02)", borderBottom: "1px solid var(--border-subtle)", fontSize: 12, color: "var(--text-muted)", textTransform: "uppercase" }}>
+              <tr style={{ background: "var(--bg-subtle-overlay)", borderBottom: "1px solid var(--border-subtle)", fontSize: 12, color: "var(--text-muted)", textTransform: "uppercase" }}>
                 <th style={{ padding: "14px 24px", textAlign: "left" }}>Rank</th>
                 <th style={{ padding: "14px 24px", textAlign: "left" }}>Name</th>
                 <th style={{ padding: "14px 24px", textAlign: "center" }}>Events</th>
@@ -1955,7 +1915,7 @@ function AdminLeaderboard() {
 }
 
 /* ---------- Admin Page Main Wrapper ---------- */
-function AdminPage({ adminPage, user, setUser, setPage }) {
+function AdminPage({ adminPage, user, setUser, setPage, refreshGlobalData }) {
   const [stats, setStats] = useState(null);
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -1964,8 +1924,8 @@ function AdminPage({ adminPage, user, setUser, setPage }) {
     setLoading(true);
     try {
       const [statsRes, eventsRes] = await Promise.all([
-        fetch("http://localhost:5000/api/admin/dashboard-stats"),
-        fetch("http://localhost:5000/api/events")
+        fetch(`${API_BASE_URL}/api/admin/dashboard-stats`),
+        fetch(`${API_BASE_URL}/api/events`)
       ]);
       const statsData = await statsRes.json();
       const eventsData = await eventsRes.json();
@@ -1979,7 +1939,7 @@ function AdminPage({ adminPage, user, setUser, setPage }) {
 
   const handleAddEvent = async (formData) => {
     try {
-      const res = await fetch("http://localhost:5000/api/events", {
+      const res = await fetch(`${API_BASE_URL}/api/events`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -1990,6 +1950,7 @@ function AdminPage({ adminPage, user, setUser, setPage }) {
       });
       if (res.ok) {
         fetchAdminData();
+        if (refreshGlobalData) refreshGlobalData();
         return true;
       }
     } catch (err) { console.error(err); }
@@ -1999,8 +1960,11 @@ function AdminPage({ adminPage, user, setUser, setPage }) {
   const handleDeleteEvent = async (id) => {
     if (!window.confirm("Are you sure you want to delete this event?")) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/events/${id}`, { method: "DELETE" });
-      if (res.ok) fetchAdminData();
+      const res = await fetch(`${API_BASE_URL}/api/events/${id}`, { method: "DELETE" });
+      if (res.ok) {
+        fetchAdminData();
+        if (refreshGlobalData) refreshGlobalData();
+      }
     } catch (err) { console.error(err); }
   };
 
@@ -2047,7 +2011,7 @@ function AuthModal({ show, onClose, isLogin, setIsLogin, setUser, setJoinedEvent
         ? { email, password }
         : { fullName, email, password, department, year };
 
-      const res = await fetch(`http://localhost:5000${endpoint}`, {
+      const res = await fetch(`${API_BASE_URL}${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -2378,7 +2342,7 @@ function ProfilePage({ user, setPage, setUser, setJoinedEvents, joinedIds = [], 
     const fetchAttended = async () => {
       if (!user?.id) return;
       try {
-        const res = await fetch(`http://localhost:5000/api/users/${user.id}/attended`);
+        const res = await fetch(`${API_BASE_URL}/api/users/${user.id}/attended`);
         const data = await res.json();
         setAttendedEvents(data);
       } catch (err) { console.error(err); }
@@ -2386,6 +2350,85 @@ function ProfilePage({ user, setPage, setUser, setJoinedEvents, joinedIds = [], 
     };
     fetchAttended();
   }, [user]);
+
+  const generateCertificate = async (event) => {
+    try {
+      const doc = new jsPDF({
+        orientation: "landscape",
+        unit: "pt",
+        format: "a4"
+      });
+      
+      const width = doc.internal.pageSize.getWidth();
+      const height = doc.internal.pageSize.getHeight();
+      
+      // Simple Border
+      doc.setDrawColor(0, 0, 0);
+      doc.setLineWidth(5);
+      doc.rect(20, 20, width - 40, height - 40);
+
+      // CSIBER Logo (Fetched from public folder)
+      try {
+        const logoRes = await fetch("/csiber-logo.png");
+        const logoBlob = await logoRes.blob();
+        
+        const base64Logo = await new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result);
+          reader.readAsDataURL(logoBlob);
+        });
+        
+        // Dimensions: 1202 x 251 (Aspect ratio ~4.78)
+        const logoWidth = 350;
+        const logoHeight = logoWidth / 4.78;
+        
+        doc.addImage(base64Logo, "PNG", (width / 2) - (logoWidth / 2), 50, logoWidth, logoHeight);
+      } catch (imgErr) {
+        console.error("Failed to load logo", imgErr);
+        // Fallback
+        doc.setFontSize(28);
+        doc.text("CSIBER", width / 2, 80, { align: "center" });
+        doc.setFontSize(14);
+        doc.text("Chhatrapati Shahu Institute of Business Education and Research", width / 2, 105, { align: "center" });
+      }
+
+      // Title
+      doc.setFontSize(36);
+      doc.text("Certificate of Participation", width / 2, 200, { align: "center" });
+
+      // Body
+      doc.setFontSize(16);
+      doc.text("This is to certify that", width / 2, 250, { align: "center" });
+
+      doc.setFontSize(30);
+      doc.text(user.fullName || "Participant", width / 2, 290, { align: "center" });
+      
+      doc.setFontSize(16);
+      doc.text("has successfully participated in the event:", width / 2, 340, { align: "center" });
+
+      doc.setFontSize(22);
+      doc.text(event.title || "Event", width / 2, 380, { align: "center" });
+
+      doc.setFontSize(14);
+      doc.text(`held on ${event.date || "Date"}`, width / 2, 410, { align: "center" });
+
+      // Signatures
+      doc.setFontSize(14);
+      doc.text("_______________________", 150, 480, { align: "center" });
+      doc.text("Event Coordinator", 150, 500, { align: "center" });
+
+      doc.text("_______________________", width - 150, 480, { align: "center" });
+      doc.text("Director, CSIBER", width - 150, 500, { align: "center" });
+
+      const safeName = (user.fullName || "User").replace(/[^a-zA-Z0-9]/g, '_');
+      const safeEvent = (event.title || "Event").replace(/[^a-zA-Z0-9]/g, '_');
+      doc.save(`${safeName}_Certificate_${safeEvent}.pdf`);
+      
+    } catch (err) {
+      console.error("PDF generation error:", err);
+      alert("There was an error generating the PDF. Please check the console.");
+    }
+  };
 
   if (!user) {
     return (
@@ -2441,7 +2484,7 @@ function ProfilePage({ user, setPage, setUser, setJoinedEvents, joinedIds = [], 
                 const evIdStr = (ev._id || ev.id)?.toString();
                 return joinedIds.some(jid => jid.toString() === evIdStr);
               }).map(ev => (
-                <div key={ev._id || ev.id} style={{ padding: 12, background: "rgba(255,255,255,0.04)", borderRadius: "var(--radius-md)", border: "1px solid var(--border-subtle)" }}>
+                <div key={ev._id || ev.id} style={{ padding: 12, background: "var(--bg-subtle-tag)", borderRadius: "var(--radius-md)", border: "1px solid var(--border-subtle)" }}>
                   <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 4 }}>{ev.title}</div>
                   <div style={{ fontSize: 12, color: "var(--text-muted)" }}>Registered for {ev.date}</div>
                 </div>
@@ -2464,12 +2507,21 @@ function ProfilePage({ user, setPage, setUser, setJoinedEvents, joinedIds = [], 
               <div style={{ padding: 12, color: "var(--text-muted)", fontSize: 13, textAlign: "center" }}>Loading certificates...</div>
             ) : attendedEvents.length > 0 ? (
               attendedEvents.map((ev, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "center", gap: 12, padding: 12, background: "rgba(139,92,246,0.1)", borderRadius: "var(--radius-md)", border: "1px solid rgba(139,92,246,0.2)" }}>
-                  <Award size={24} color="#8b5cf6" />
-                  <div>
-                    <div style={{ fontSize: 14, fontWeight: 600, color: "#a5b4fc" }}>Participation - {ev.title}</div>
-                    <div style={{ fontSize: 12, color: "var(--text-muted)" }}>Issued by CampusFlux • {ev.date}</div>
+                <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, padding: 12, background: "rgba(139,92,246,0.1)", borderRadius: "var(--radius-md)", border: "1px solid rgba(139,92,246,0.2)" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                    <Award size={24} color="#8b5cf6" />
+                    <div>
+                      <div style={{ fontSize: 14, fontWeight: 600, color: "#a5b4fc" }}>Participation - {ev.title}</div>
+                      <div style={{ fontSize: 12, color: "var(--text-muted)" }}>Issued by CSIBER • {ev.date}</div>
+                    </div>
                   </div>
+                  <button 
+                    onClick={() => generateCertificate(ev)}
+                    className="btn-primary" 
+                    style={{ padding: "6px 12px", fontSize: 12, display: "flex", alignItems: "center", gap: 6 }}
+                  >
+                    <Download size={14} /> PDF
+                  </button>
                 </div>
               ))
             ) : (
@@ -2495,7 +2547,7 @@ function App() {
   const [searchQuery, setSearchQuery] = useState("");
   const [user, setUser] = useState(null);
   const [stats, setStats] = useState({ activeStudents: 0, annualEvents: 0, dynamicCommunities: 0, totalRegistrations: 0 });
-  const [theme, setTheme] = useState("dark");
+  const [theme, setTheme] = useState("light");
   const [toasts, setToasts] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [joinedEvents, setJoinedEvents] = useState([]);
@@ -2517,22 +2569,32 @@ function App() {
     document.documentElement.setAttribute("data-theme", newTheme);
   };
 
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+  }, []);
+
   const handleJoinEvent = async (event) => {
     if (!user) {
       setShowAuth(true);
       addToast("Please sign in to register for events", "info");
       return;
     }
-    if (joinedEvents.includes(event.id.toString()) || joinedEvents.includes(event.id)) {
+    const eventId = event?._id || event?.id;
+    if (!eventId) {
+      addToast("Event ID not found", "error");
+      return;
+    }
+    const eventIdStr = eventId.toString();
+    if (joinedEvents.some(id => id?.toString() === eventIdStr)) {
       addToast("You are already registered for this event", "info");
       return;
     }
 
     try {
-      const res = await fetch(`http://localhost:5000/api/users/${user.id}/join`, {
+      const res = await fetch(`${API_BASE_URL}/api/users/${user.id}/join`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ eventId: event.id.toString() }),
+        body: JSON.stringify({ eventId: eventIdStr }),
       });
       const data = await res.json();
       if (res.ok) {
@@ -2553,23 +2615,24 @@ function App() {
     }
   }, [user, page]);
 
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const [statsRes, eventsRes] = await Promise.all([
+        fetch(`${API_BASE_URL}/api/stats`),
+        fetch(`${API_BASE_URL}/api/events`)
+      ]);
+      const statsData = await statsRes.json();
+      const eventsData = await eventsRes.json();
+      setStats(statsData);
+      setEvents(eventsData);
+    } catch (err) {
+      console.error("Failed to fetch data:", err);
+    }
+    setLoading(false);
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const [statsRes, eventsRes] = await Promise.all([
-          fetch("http://localhost:5000/api/stats"),
-          fetch("http://localhost:5000/api/events")
-        ]);
-        const statsData = await statsRes.json();
-        const eventsData = await eventsRes.json();
-        setStats(statsData);
-        setEvents(eventsData);
-      } catch (err) {
-        console.error("Failed to fetch data:", err);
-      }
-      setLoading(false);
-    };
     fetchData();
   }, []);
 
@@ -2608,7 +2671,7 @@ function App() {
               <p style={{ color: "var(--text-muted)", fontSize: 14, fontWeight: 500 }}>Syncing CampusFlux...</p>
             </div>
           ) : user?.role === "admin" ? (
-            <AdminPage adminPage={page} user={user} setUser={setUser} setPage={setPage} />
+            <AdminPage adminPage={page} user={user} setUser={setUser} setPage={setPage} refreshGlobalData={fetchData} />
           ) : (
             <>
               {page === "home" && <HomePage setPage={setPage} setShowAuth={setShowAuth} stats={stats} />}
@@ -2634,7 +2697,7 @@ function App() {
         event={selectedEvent}
         onClose={() => setSelectedEvent(null)}
         onJoin={handleJoinEvent}
-        isJoined={selectedEvent && joinedEvents.includes(selectedEvent.id)}
+        isJoined={selectedEvent && joinedEvents.some(id => id?.toString() === (selectedEvent._id || selectedEvent.id)?.toString())}
       />
 
 
